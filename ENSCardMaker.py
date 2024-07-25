@@ -23,9 +23,9 @@ if 'avatar' in profile:
     darkened_color = tuple(int(c * 0.5) for c in dominant_color)
 
     # Use the darkened color as the background color
-    img = Image.new('RGB', (740, 280), color=darkened_color)
+    img = Image.new('RGB', (740, 290), color=darkened_color)
 else:
-    img = Image.new('RGB', (740, 280), color=(0, 0, 0))
+    img = Image.new('RGB', (740, 290), color=(0, 0, 0))
 
 draw = ImageDraw.Draw(img)
 
@@ -151,10 +151,23 @@ else:
     font_path = "/usr/share/fonts/truetype/inter/Inter-Regular.ttf"
     font = ImageFont.truetype(font_path, font_size)
     draw.text((280, social_media_y), f"[no email given]", fill=(255, 255, 255), font=font)
+    
+social_media_y += font_size + social_media_spacing
+if 'url' in profile['records']:
+    url = profile['records']['url']
+    font_size = 12 # Specify the desired font size
+    font_path = "/usr/share/fonts/truetype/inter/Inter-Regular.ttf"  # Path to the Inter Regular font
+    font = ImageFont.truetype(font_path, font_size)
+    draw.text((280, social_media_y), f"Website: {url}", fill=(255, 255, 255), font=font)  # Draw the text with the specified font
+else:
+    font_size = 12
+    font_path = "/usr/share/fonts/truetype/inter/Inter-Regular.ttf"
+    font = ImageFont.truetype(font_path, font_size)
+    draw.text((280, social_media_y), f"[no website given]", fill=(255, 255, 255), font=font)
 
 # Add watermark
 watermark_text = "github.com/littlebitstudios/ENSCardMaker"
-watermark_font_size = 12
+watermark_font_size = 10
 watermark_font_path = "/usr/share/fonts/truetype/inter/Inter-Regular.ttf"
 watermark_font = ImageFont.truetype(watermark_font_path, watermark_font_size)
 watermark_bbox = draw.textbbox((0, 0), watermark_text, font=watermark_font)
