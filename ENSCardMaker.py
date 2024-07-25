@@ -144,12 +144,34 @@ if 'email' in profile['records']:
     email = profile['records']['email']
     font_size = 12 # Specify the desired font size
     font_path = "/usr/share/fonts/truetype/inter/Inter-Regular.ttf"  # Path to the Inter Regular font
-    font = ImageFont.truetype(font_path, font_size)  # Load the desired font
+    font = ImageFont.truetype(font_path, font_size)
     draw.text((280, social_media_y), f"Email: {email}", fill=(255, 255, 255), font=font)  # Draw the text with the specified font
 else:
     font_size = 12
     font_path = "/usr/share/fonts/truetype/inter/Inter-Regular.ttf"
     font = ImageFont.truetype(font_path, font_size)
     draw.text((280, social_media_y), f"[no email given]", fill=(255, 255, 255), font=font)
+
+# Add watermark
+watermark_text = "github.com/littlebitstudios/ENSCardMaker"
+watermark_font_size = 12
+watermark_font_path = "/usr/share/fonts/truetype/inter/Inter-Regular.ttf"
+watermark_font = ImageFont.truetype(watermark_font_path, watermark_font_size)
+watermark_bbox = draw.textbbox((0, 0), watermark_text, font=watermark_font)
+watermark_width = watermark_bbox[2] - watermark_bbox[0]
+watermark_height = watermark_bbox[3] - watermark_bbox[1]
+watermark_position = (img.width - watermark_width - 10, img.height - watermark_height - 10)
+
+# Define the RGBA color for the watermark text (e.g., slightly darker or transparent)
+watermark_color = (255, 255, 255, 128)  # White with 50% transparency
+
+# Create a new image for the watermark text with transparency
+watermark_image = Image.new('RGBA', img.size, (0, 0, 0, 0))
+watermark_draw = ImageDraw.Draw(watermark_image)
+watermark_draw.text(watermark_position, watermark_text, fill=watermark_color, font=watermark_font)
+
+# Composite the watermark image onto the original image
+img = img.convert("RGBA")
+img = Image.alpha_composite(img, watermark_image)
 
 img.save(f"{user}.png")
