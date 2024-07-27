@@ -1,6 +1,6 @@
 import requests
 import json
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageSequence
 import textwrap
 
 user = input("Enter an ENS name or an ETH address (OxXXXX...): ")
@@ -12,16 +12,25 @@ profilejson = profilerequest.content.decode("utf-8")
 profile = json.loads(profilejson)
 
 if 'avatar' in profile:
-    avatar = Image.open(requests.get(profile['avatar'], stream=True).raw)
+    avatar_response = requests.get(profile['avatar'], stream=True)
+    avatar = Image.open(avatar_response.raw)
+    
+    if avatar.format == 'GIF':
+        avatar = next(ImageSequence.Iterator(avatar))  # Get the first frame of the GIF
+    
     avatar_size = (240, 240)  # Specify the desired size of the avatar image
     avatar = avatar.resize(avatar_size)  # Resize the avatar image
-
+    
+    # Ensure the image is in RGB mode
+    if avatar.mode != 'RGB':
+        avatar = avatar.convert('RGB')
+    
     # Get the dominant color of the avatar
     dominant_color = avatar.getpixel((0, 0))
-
+    
     # Darken the dominant color
     darkened_color = tuple(int(c * 0.5) for c in dominant_color)
-
+    
     # Use the darkened color as the background color
     img = Image.new('RGB', (740, 290), color=darkened_color)
 else:
