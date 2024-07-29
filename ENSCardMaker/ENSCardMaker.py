@@ -26,6 +26,8 @@ def main():
     print("Starting card generation...")
 
     avatar = None
+    identicon_used = False
+    fallback = False
     if 'avatar' in profile:
         try:
             avatar_response = requests.get(profile['avatar'], stream=True)
@@ -51,9 +53,9 @@ def main():
             img = Image.new('RGB', (740, 290), color=darkened_color)
 
         except Exception as e:
-            print("Failed to collect avatar:", str(e))
-            print("An identicon-style image will replace the ENS avatar.")
-
+            identicon_used = True
+            fallback = True
+            
             # Generate the identicon image
             identicon = pydenticon.Generator(5, 5).generate(profile['address'], 240, 240)
 
@@ -73,6 +75,8 @@ def main():
             # Use the darkened color as the background color
             img = Image.new('RGB', (740, 290), color=darkened_color)
     else:
+        identicon_used = True
+        
         # Generate the identicon image
         identicon = pydenticon.Generator(5, 5).generate(profile['address'], 240, 240)
 
@@ -98,16 +102,26 @@ def main():
         avatar_size = (240, 240)  # Specify the desired size of the avatar image
         avatar = avatar.resize(avatar_size)  # Resize the avatar image
         img.paste(avatar, (20, 20))
-        if profile['records']['avatar'].startswith("eip155:1/"):
+        if profile['records']['avatar'].startswith("eip155:1/") and not identicon_used:
             # Draw a small box in the corner of the avatar
             box_position = (30, 30, 80, 60)  # Define the position of the box
             draw.rectangle(box_position, fill='#2081E2')
         
             # Draw the text "NFT" inside the box
             font_size = 20  # Specify the desired font size for the NFT text
-            font_path = "/usr/share/fonts/truetype/inter/Inter-Bold.ttf"  # Path to the Inter Bold font
+            font_path = "./fonts/Inter-Bold.ttf"  # Path to the Inter Bold font
             font = ImageFont.truetype(font_path, font_size)  # Load the desired font
             draw.text((36, 33), "NFT", fill='white', font=font)  # Draw the text inside the box
+        elif fallback:
+            # Draw a small box in the corner of the avatar
+            box_position = (30, 30, 150, 60)
+            draw.rectangle(box_position, fill='#FF0000')
+            
+            # Draw the text "FALLBACK" inside the box
+            font_size = 20
+            font_path = "./fonts/Inter-Bold.ttf"
+            font = ImageFont.truetype(font_path, font_size)
+            draw.text((39, 33), "FALLBACK", fill='white', font=font)
 
     # Display the user's nickname, or replace it with their ENS name they don't have a nickname
     if 'name' in profile['records']:
