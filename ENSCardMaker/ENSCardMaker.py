@@ -98,6 +98,16 @@ def main():
         avatar_size = (240, 240)  # Specify the desired size of the avatar image
         avatar = avatar.resize(avatar_size)  # Resize the avatar image
         img.paste(avatar, (20, 20))
+        if profile['records']['avatar'].startswith("eip155:1/"):
+            # Draw a small box in the corner of the avatar
+            box_position = (30, 30, 80, 60)  # Define the position of the box
+            draw.rectangle(box_position, fill='#2081E2')
+        
+            # Draw the text "NFT" inside the box
+            font_size = 20  # Specify the desired font size for the NFT text
+            font_path = "/usr/share/fonts/truetype/inter/Inter-Bold.ttf"  # Path to the Inter Bold font
+            font = ImageFont.truetype(font_path, font_size)  # Load the desired font
+            draw.text((36, 33), "NFT", fill='white', font=font)  # Draw the text inside the box
 
     # Display the user's nickname, or replace it with their ENS name they don't have a nickname
     if 'name' in profile['records']:
