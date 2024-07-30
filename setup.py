@@ -6,7 +6,7 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
     name='ENSCardMaker',
-    version='1.2',
+    version='1.2.1',
     description='Takes an ENS name or ETH address and returns a card based on information from an ENS profile.',
     long_description=long_description,
     long_description_content_type='text/markdown',
