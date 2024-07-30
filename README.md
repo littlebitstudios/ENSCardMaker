@@ -15,4 +15,8 @@ Where `<user>` is the ENS name or ETH address you want to generate a card for, a
 # Credits/Licensing
 ENS, the brand, is held by ENS Labs Limited.
 
+This software uses the font Inter by Rasmus Andersson, which is licensed under the [SIL Open Font License](https://openfontlicense.org/), a copy of which is at the root of the repository as `LICENSE-Inter.txt`.<br>
+The font has a GitHub repository at https://github.com/rsms/inter.<br>
+Download the font from [Google Fonts](https://fonts.google.com/specimen/Inter).
+
 As with most of my code, this code is published under the MIT License.
