@@ -15,6 +15,7 @@ setup(
     license='MIT',
     license_files='LICENSE',
     packages=find_packages(),
+    package_data={'ENSCardMaker': ['fonts/*.ttf']},
     install_requires=[
         'requests',
         'Pillow',
